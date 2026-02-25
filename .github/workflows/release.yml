@@ -1,0 +1,37 @@
+name: Build and Release Plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Create Release Asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Plugin Zip
+        run: |
+          # Create a temporary directory to bundle the plugin
+          mkdir shorts-api
+          
+          # Copy only necessary files/folders
+          cp shorts-api.php shorts-api/
+          cp readme.txt shorts-api/
+          cp LICENSE shorts-api/
+          cp index.php shorts-api/
+          cp README.md shorts-api/
+          cp -r assets shorts-api/
+          
+          # Create the zip
+          zip -r shorts-api.zip shorts-api
+          
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: shorts-api.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
