@@ -1,10 +1,10 @@
-# 🎬 Shorts API Organized
+# 🎬 Shorts API
 
 [![WordPress Plugin](https://img.shields.io/badge/WordPress-Plugin-blue.svg)](https://wordpress.org/plugins/shorts-api-optimized/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![Version](https://img.shields.io/badge/Version-2.1.0-green.svg)]()
 
-**Shorts API Organized** is a professional WordPress plugin designed to power high-performance, TikTok-style video portals. It bridges your WordPress content with a modern Node.js/Express backend to deliver video feeds with lightning speed.
+**Shorts API** is a professional WordPress plugin designed to power high-performance, TikTok-style video portals. It bridges your WordPress content with a modern Node.js/Express backend to deliver video feeds with lightning speed.
 
 ---
 
