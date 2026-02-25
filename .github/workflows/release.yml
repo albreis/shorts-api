@@ -17,19 +17,7 @@ jobs:
 
       - name: Create Plugin Zip
         run: |
-          # Create a temporary directory to bundle the plugin
-          mkdir shorts-api
-          
-          # Copy only necessary files/folders
-          cp shorts-api.php shorts-api/
-          cp readme.txt shorts-api/
-          cp LICENSE shorts-api/
-          cp index.php shorts-api/
-          cp README.md shorts-api/
-          cp -r assets shorts-api/
-          
-          # Create the zip
-          zip -r shorts-api.zip shorts-api
+          zip -r shorts-api.zip shorts-api.php readme.txt LICENSE index.php README.md assets
           
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
