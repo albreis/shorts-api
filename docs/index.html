@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shorts API Optimized - Potencialize seu Portal de Vídeos</title>
+    <title>Shorts API - Potencialize seu Portal de Vídeos</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -57,10 +57,12 @@
             font-weight: 800;
             background: linear-gradient(90deg, #fff, var(--secondary));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            text-decoration: none;
         }
 
         .hero {
@@ -77,9 +79,9 @@
             font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 1.5rem;
             background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.5));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -211,10 +213,10 @@
     <div class="bg-glow"></div>
 
     <header>
-        <div class="logo">
+        <a href="index.html" class="logo">
             <i data-lucide="play-circle"></i>
             Shorts API
-        </div>
+        </a>
         <a href="https://github.com/albreis/shorts-api" class="btn btn-secondary">
             <i data-lucide="github"></i> GitHub
         </a>
@@ -227,8 +229,10 @@
         <h1>Vídeos Curtos,<br>Performance Infinita.</h1>
         <p>A solução definitiva para sincronizar seu conteúdo WordPress com backends de alta performance. Desenvolvido para portais que não podem parar.</p>
         <div class="cta-group">
-            <a href="https://github.com/albreis/shorts-api" class="btn btn-primary">Começar Agora</a>
-            <a href="#features" class="btn btn-secondary">Explorar Recursos</a>
+            <a href="#api-docs" class="btn btn-primary"><i data-lucide="book-open"></i> Documentação</a>
+            <a href="register.html" class="btn btn-secondary"><i data-lucide="plus-circle"></i> Registrar Site</a>
+            <a href="update.html" class="btn btn-secondary"><i data-lucide="settings"></i> Configurações</a>
+            <a href="sync.html" class="btn btn-secondary"><i data-lucide="zap"></i> Enviar Shorts</a>
         </div>
     </section>
 
@@ -250,11 +254,143 @@
         </div>
     </section>
 
+    <style>
+        .api-docs {
+            padding: 100px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .api-docs h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .doc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .doc-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 2rem;
+            border-radius: 1.5rem;
+        }
+        .doc-card h4 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        pre {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            border: 1px solid var(--glass-border);
+            margin-top: 1rem;
+        }
+        code {
+            color: var(--secondary);
+        }
+        .endpoint {
+            font-weight: bold;
+            color: #fff;
+            background: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .doc-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <section id="api-docs" class="api-docs">
+        <h2>🚀 Integração Direta (Sem Plugin)</h2>
+        <p style="text-align: center; color: var(--accent); font-weight: 600; margin-bottom: 2rem;">
+            ⚠️ IMPORTANTE: Todas as requisições devem conter o header <code>X-API-Key</code>.
+        </p>
+        <div class="doc-grid">
+            <div class="doc-card">
+                <h4><i data-lucide="key"></i> 1. Registro do Site</h4>
+                <p>O primeiro passo é registrar seu domínio no backend para obter um token de verificação.</p>
+                <div class="endpoint-block">
+                    <p><span class="endpoint">POST</span><code>/api/register-site</code></p>
+                    <p class="copyright" style="margin: 0.5rem 0;">Header: <code>X-API-Key: sua_chave</code></p>
+                    <pre><code>{
+  "domain": "meusite.com",
+  "apiKey": "sua_chave_secreta",
+  "domainId": "meusite-com",
+  "site_title": "Meu Portal",
+  "sidebar_title": "Explorar Vídeos",
+  "logo_url": "https://...",
+  "favicon_url": "https://...",
+  "ga_id": "G-XXXXXXXXXX",
+  "sidebar_bg_color": "#18181b"
+}</code></pre>
+                </div>
+            </div>
+            <div class="doc-card">
+                <h4><i data-lucide="globe"></i> 2. Configurações de DNS</h4>
+                <p>Adicione os registros abaixo no seu provedor de DNS (Cloudflare, etc.):</p>
+                <div style="margin-top:1rem; opacity: 0.8;">
+                    <p><strong>Registro A:</strong> <code>82.25.66.100</code> (Host: <code>@</code> ou <code>shorts</code>)</p>
+                    <p><strong>Registro TXT:</strong> Use o <code>verificationToken</code> recebido no Passo 1.</p>
+                </div>
+            </div>
+            <div class="doc-card">
+                <h4><i data-lucide="shield-check"></i> 3. Verificação</h4>
+                <p>Após propagar o DNS, ative seu domínio para liberar a exibição dos vídeos.</p>
+                <div class="endpoint-block">
+                    <p><span class="endpoint">POST</span><code>/api/verify-site</code></p>
+                    <p class="copyright" style="margin: 0.5rem 0;">Header: <code>X-API-Key: sua_chave</code></p>
+                    <pre><code>{
+  "domain": "meusite.com"
+}</code></pre>
+                </div>
+            </div>
+            <div class="doc-card">
+                <h4><i data-lucide="refresh-cw"></i> 4. Sincronização (CRUD)</h4>
+                <p>Use o endpoint de sync para enviar seus vídeos com todos os metadados necessários.</p>
+                <div class="endpoint-block">
+                    <p><span class="endpoint">POST</span><code>/api/sync</code></p>
+                    <p class="copyright" style="margin: 0.5rem 0;">Header: <code>X-API-Key: sua_chave</code></p>
+                    <pre><code>{
+  "shortId": "123",
+  "domain": "meusite.com",
+  "title": "Título do Vídeo",
+  "excerpt": "Breve descrição do vídeo...",
+  "status": "publish",
+  "categories": [
+    {"id": 1, "name": "Geral", "slug": "geral"}
+  ],
+  "tags": [
+    {"id": 5, "name": "Trending", "slug": "trending"}
+  ],
+  "post_url": "https://meusite.com/video-123",
+  "video_urls": ["https://cdn.com/video.mp4"],
+  "featured_image": "https://cdn.com/thumb.jpg",
+  "post_date": "2024-02-26T12:00:00Z",
+  "author_id": 1
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <div class="footer-links">
+            <a href="index.html">Documentação</a>
+            <a href="register.html">Registrar Site</a>
+            <a href="update.html">Configurações</a>
+            <a href="sync.html">Enviar Shorts</a>
             <a href="privacy-policy.html">Privacidade</a>
             <a href="terms-of-use.html">Termos de Uso</a>
-            <a href="https://github.com/albreis/shorts-api">Documentação</a>
+            <a href="https://github.com/albreis/shorts-api">GitHub</a>
         </div>
         <p class="copyright">© 2026 Shorts API. Criado por ER Soluções Web.</p>
     </footer>

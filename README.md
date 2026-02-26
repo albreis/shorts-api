@@ -65,6 +65,17 @@ The plugin acts as a **Data Provider** for a decoupled frontend (React/Next.js).
 
 ---
 
+## 🌐 Modo Standalone (Sem WordPress)
+
+Se você deseja usar a API sem o plugin do WordPress, pode integrar diretamente via HTTP ou usar nossas ferramentas administrativas prontas.
+
+### 🛠️ Ferramentas Administrativas
+Para facilitar o uso sem o plugin, criamos ferramentas administrativas prontas:
+1. **[Registrar Site](https://albreis.github.io/shorts-api/register.html)**: Gere sua chave e configure seu domínio.
+2. **[Configurações](https://albreis.github.io/shorts-api/update.html)**: Atualize logos, cores e títulos do portal.
+3. **[Enviar Shorts](https://albreis.github.io/shorts-api/sync.html)**: Interface visual para cadastrar vídeos manualmente.
+ vídeos.
+
 ## 📄 License
 
 This project is licensed under the **GPLv2 or later**.

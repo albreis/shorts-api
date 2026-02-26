@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Site - Shorts API</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5b21b6;
+            --secondary: #00f2ea;
+            --accent: #ff0050;
+            --dark: #09090b;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background-color: var(--dark); color: #fff; line-height: 1.6; min-height: 100vh; padding: 2rem; }
+        .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 20% 30%, rgba(91, 33, 182, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(0, 242, 234, 0.1) 0%, transparent 50%); }
+
+        .container { max-width: 800px; margin: 0 auto; }
+        header { margin-bottom: 3rem; text-align: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(90deg, #fff, var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+
+        .card { background: var(--glass); border: 1px solid var(--glass-border); padding: 2rem; border-radius: 2rem; backdrop-filter: blur(20px); margin-bottom: 2rem; }
+        h2 { margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--secondary); }
+
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: rgba(255,255,255,0.7); }
+        input { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 0.8rem; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+        input:focus { border-color: var(--secondary); }
+
+        .btn { padding: 1rem 2rem; border-radius: 99px; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1rem; }
+        .btn-primary { background: var(--secondary); color: var(--dark); box-shadow: 0 10px 20px rgba(0, 242, 234, 0.2); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 242, 234, 0.4); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .alert { padding: 1rem; border-radius: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; border: 1px solid transparent; }
+        .alert-warning { background: rgba(255, 165, 0, 0.1); border-color: orange; color: #ffca28; }
+        .alert-success { background: rgba(0, 255, 0, 0.1); border-color: lime; color: #69f0ae; }
+        .alert-error { background: rgba(255, 0, 0, 0.1); border-color: var(--accent); color: #ff5252; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        code { background: rgba(0,0,0,0.5); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--secondary); font-size: 0.9rem; word-break: break-all; }
+
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.5s; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div id="app" class="container">
+        <header>
+            <a href="index.html" class="logo"><i data-lucide="play-circle"></i> Shorts API</a>
+            <p style="opacity: 0.6; margin-top: 0.5rem;">Registro de Sites Standalone</p>
+        </header>
+
+        <div class="alert alert-warning">
+            <i data-lucide="alert-triangle"></i>
+            <div>
+                <strong>Importante:</strong> Guarde sua API Key em um local seguro. Você precisará dela para enviar vídeos e atualizar configurações no futuro.
+            </div>
+        </div>
+
+        <div v-if="!step" class="card">
+            <h2><i data-lucide="settings"></i> Dados do Site</h2>
+            <form @submit.prevent="registerSite">
+                <div class="form-group">
+                    <label>Domínio (ex: meusite.com)</label>
+                    <input v-model="form.domain" placeholder="meusite.com" required>
+                </div>
+                <div class="form-group">
+                    <label>API Key (Guarde esta chave em local seguro)</label>
+                    <input v-model="form.apiKey" placeholder="Sua chave secreta" required>
+                </div>
+                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Título do Site</label>
+                        <input v-model="form.site_title" placeholder="Meu Portal de Shorts">
+                    </div>
+                    <div class="form-group">
+                        <label>Texto da Sidebar</label>
+                        <input v-model="form.sidebar_title" placeholder="Explorar">
+                    </div>
+                </div>
+                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>URL da Logo</label>
+                        <input v-model="form.logo_url" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>URL do Favicon</label>
+                        <input v-model="form.favicon_url" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Google Analytics ID</label>
+                        <input v-model="form.ga_id" placeholder="G-XXXXXXXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label>Cor de Fundo da Sidebar</label>
+                        <input type="color" v-model="form.sidebar_bg_color" style="height: 45px; padding: 2px;">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" :disabled="loading" style="margin-top: 1rem;">
+                    <i v-if="loading" data-lucide="refresh-cw" class="animate-spin"></i>
+                    {{ loading ? 'Registrando...' : 'Registrar Site' }}
+                </button>
+            </form>
+            <p v-if="error" class="alert alert-error" style="margin-top:1rem;">{{ error }}</p>
+        </div>
+
+        <transition name="fade">
+            <div v-if="step === 'dns'" class="card">
+                <h2><i data-lucide="globe"></i> Configuração de DNS</h2>
+                <p>O site foi pré-registrado! Configure os registros abaixo no seu provedor para ativar:</p>
+                
+                <table>
+                    <thead>
+                        <tr><th>Tipo</th><th>Host</th><th>Valor</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>A</code></td><td><code>shorts</code></td><td><code>82.25.66.100</code></td></tr>
+                        <tr><td><code>TXT</code></td><td><code>shorts</code></td><td><code id="token-val">{{ verificationToken }}</code></td></tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-success" style="margin-top: 2rem;">
+                    <i data-lucide="key"></i>
+                    <div>
+                        <strong>API Key Registrada:</strong> <code>{{ currentApiKey }}</code><br>
+                        <small>Copie e salve agora!</small>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button @click="verifyDNS" class="btn btn-primary" :disabled="loading">
+                        <i data-lucide="shield-check"></i>
+                        {{ loading ? 'Verificando...' : 'Verificar DNS e Ativar' }}
+                    </button>
+                    <button @click="step = null" class="btn btn-secondary" style="border: 1px solid var(--glass-border); background: none; color: #fff;">Voltar</button>
+                </div>
+                <p v-if="error" class="alert alert-error" style="margin-top:1rem;">{{ error }}</p>
+            </div>
+        </transition>
+
+        <transition name="fade">
+            <div v-if="step === 'success'" class="card" style="text-align: center;">
+                <i data-lucide="check-circle" size="64" color="#00f2ea" style="margin-bottom: 1.5rem;"></i>
+                <h2>Site Ativado com Sucesso!</h2>
+                <p>Seu domínio foi verificado e está pronto para receber shorts.</p>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+                    <a href="sync.html" class="btn btn-primary">Enviar Vídeos</a>
+                    <a href="update.html" class="btn btn-secondary" style="border: 1px solid var(--glass-border); background: none; color: #fff;">Configurar Portal</a>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+        const { createApp, ref, reactive, onMounted } = Vue;
+
+        createApp({
+            setup() {
+                const step = ref(null);
+                const loading = ref(false);
+                const error = ref(null);
+                const verificationToken = ref('');
+                const currentApiKey = ref('');
+                
+                const form = reactive({
+                    domain: '',
+                    apiKey: '',
+                    site_title: '',
+                    sidebar_title: '',
+                    logo_url: '',
+                    favicon_url: '',
+                    ga_id: '',
+                    sidebar_bg_color: '#18181b',
+                    domainId: ''
+                });
+
+                const generateApiKey = () => {
+                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    let result = '';
+                    for (let i = 0; i < 32; i++) {
+                        result += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    return result;
+                };
+
+                const API_BASE = 'https://shorts.albreis.com.br/api';
+
+                const registerSite = async () => {
+                    loading.value = true;
+                    error.value = null;
+                    
+                    form.domainId = form.domain.replace(/\./g, '-');
+                    
+                    try {
+                        const res = await fetch(`${API_BASE}/register-site`, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'X-API-Key': form.apiKey || 'initial_registration'
+                            },
+                            body: JSON.stringify(form)
+                        });
+
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data.error || 'Erro ao registrar site');
+
+                        verificationToken.value = data.site.verificationToken;
+                        currentApiKey.value = form.apiKey || data.site.apiKey || 'Chave gerada no servidor';
+                        step.value = 'dns';
+                        setTimeout(() => lucide.createIcons(), 100);
+                    } catch (e) {
+                        error.value = e.message;
+                    } finally {
+                        loading.value = false;
+                    }
+                };
+
+                const verifyDNS = async () => {
+                    loading.value = true;
+                    error.value = null;
+
+                    try {
+                        const res = await fetch(`${API_BASE}/verify-site`, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'X-API-Key': currentApiKey.value
+                            },
+                            body: JSON.stringify({ domain: form.domain })
+                        });
+
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data.error || 'Verificação falhou. Verifique se os registros DNS já propagaram.');
+
+                        step.value = 'success';
+                        setTimeout(() => lucide.createIcons(), 100);
+                    } catch (e) {
+                        error.value = e.message;
+                    } finally {
+                        loading.value = false;
+                    }
+                };
+
+                onMounted(() => {
+                    form.apiKey = generateApiKey();
+                    lucide.createIcons();
+                });
+
+                return { form, step, loading, error, verificationToken, currentApiKey, registerSite, verifyDNS };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
