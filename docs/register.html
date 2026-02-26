@@ -204,13 +204,14 @@
                     form.domainId = form.domain.replace(/\./g, '-');
                     
                     try {
+                        const { apiKey, ...payload } = form;
                         const res = await fetch(`${API_BASE}/register-site`, {
                             method: 'POST',
                             headers: { 
                                 'Content-Type': 'application/json',
-                                'X-API-Key': form.apiKey || 'initial_registration'
+                                'X-API-Key': apiKey || 'initial_registration'
                             },
-                            body: JSON.stringify(form)
+                            body: JSON.stringify(payload)
                         });
 
                         const data = await res.json();

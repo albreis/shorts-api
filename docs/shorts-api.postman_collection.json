@@ -1,0 +1,233 @@
+{
+	"info": {
+		"_postman_id": "7f8b9c2a-1e4d-4b5a-9f8c-3d2e1f0a9b8c",
+		"name": "Shorts API v2",
+		"description": "Coleção de requests para a Shorts API - Sincronização de vídeos curtos para portais.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Configuração do Site",
+			"item": [
+				{
+					"name": "Registrar Site",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"domain\": \"meusite.com\",\n  \"site_title\": \"Meu Portal\",\n  \"sidebar_title\": \"Explorar\",\n  \"logo_url\": \"https://...\",\n  \"favicon_url\": \"https://...\",\n  \"ga_id\": \"G-XXXXXXXXXX\",\n  \"sidebar_bg_color\": \"#18181b\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/register-site",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"register-site"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar Site (DNS)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"domain\": \"meusite.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/verify-site",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"verify-site"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter Informações do Site",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/info",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sincronizar Estilos/Configurações",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"site_title\": \"Novo Título\",\n  \"logo_url\": \"https://...\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sync-configs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"sync-configs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gerenciamento de Shorts",
+			"item": [
+				{
+					"name": "Sincronizar/Criar Short",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"shortId\": \"123\",\n  \"title\": \"Vídeo Incrível\",\n  \"video_urls\": [\n    \"https://cdn.com/video.mp4\"\n  ],\n  \"categories\": [\n    {\n      \"id\": 1,\n      \"name\": \"Entretenimento\"\n    }\n  ],\n  \"tags\": [\n    \"viral\",\n    \"top\"\n  ],\n  \"featured_image\": \"https://...\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sync",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"sync"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Short",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/shorts/123",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"shorts",
+								"123"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://shorts.albreis.com.br",
+			"type": "string"
+		},
+		{
+			"key": "apiKey",
+			"value": "sua_chave_aqui",
+			"type": "string"
+		}
+	]
+}
