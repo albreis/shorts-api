@@ -319,10 +319,9 @@
         <div class="doc-grid">
             <div class="doc-card">
                 <h4><i data-lucide="key"></i> 1. Registro do Site</h4>
-                <p>O primeiro passo é registrar seu domínio no backend para obter um token de verificação.</p>
+                <p>O primeiro passo é registrar seu domínio. A API gerará uma <code>apiKey</code> exclusiva e retornará no JSON de resposta. <strong>Salve esta chave em local seguro!</strong></p>
                 <div class="endpoint-block">
                     <p><span class="endpoint">POST</span><code>/api/register-site</code></p>
-                    <p class="copyright" style="margin: 0.5rem 0;">Header: <code>X-API-Key: sua_chave</code></p>
                     <pre><code>{
   "domain": "meusite.com",
   "domainId": "meusite-com",

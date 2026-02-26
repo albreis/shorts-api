@@ -10,13 +10,14 @@
 			"name": "Configuração do Site",
 			"item": [
 				{
-					"name": "Registrar Site",
+					"name": "Registrar Novo Site (Gera API Key)",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "X-API-Key",
-								"value": "{{apiKey}}",
+								"value": "initial_registration",
+								"description": "Use 'initial_registration' ou deixe em branco para novo registro",
 								"type": "text"
 							}
 						],
@@ -38,7 +39,8 @@
 								"api",
 								"register-site"
 							]
-						}
+						},
+						"description": "Ao registrar um novo domínio, a API gerará uma apiKey única e retornará no JSON de resposta. Salve esta chave!"
 					},
 					"response": []
 				},

@@ -75,8 +75,8 @@
                     <input v-model="form.domain" placeholder="meusite.com" required>
                 </div>
                 <div class="form-group">
-                    <label>API Key (Guarde esta chave em local seguro)</label>
-                    <input v-model="form.apiKey" placeholder="Sua chave secreta" required>
+                    <label>API Key (Deixe em branco para gerar uma nova ou insira a sua para atualizar)</label>
+                    <input v-model="form.apiKey" placeholder="Sua chave secreta (Opcional)">
                 </div>
                 <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="form-group">
@@ -186,15 +186,6 @@
                     domainId: ''
                 });
 
-                const generateApiKey = () => {
-                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                    let result = '';
-                    for (let i = 0; i < 32; i++) {
-                        result += chars.charAt(Math.floor(Math.random() * chars.length));
-                    }
-                    return result;
-                };
-
                 const API_BASE = 'https://shorts.albreis.com.br/api';
 
                 const registerSite = async () => {
@@ -218,7 +209,7 @@
                         if (!res.ok) throw new Error(data.error || 'Erro ao registrar site');
 
                         verificationToken.value = data.site.verificationToken;
-                        currentApiKey.value = form.apiKey || data.site.apiKey || 'Chave gerada no servidor';
+                        currentApiKey.value = data.site.apiKey;
                         step.value = 'dns';
                         setTimeout(() => lucide.createIcons(), 100);
                     } catch (e) {
@@ -255,7 +246,6 @@
                 };
 
                 onMounted(() => {
-                    form.apiKey = generateApiKey();
                     lucide.createIcons();
                 });
 
