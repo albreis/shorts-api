@@ -235,7 +235,7 @@ function shorts_api_sync_post($post_id)
         'post_url' => get_permalink($post_id),
         'video_urls' => $video_urls,
         'featured_image' => get_the_post_thumbnail_url($post_id, 'full') ?: '',
-        'post_date' => (get_post_datetime($post) ? get_post_datetime($post)->format('c') : $post->post_date),
+        'post_date' => (get_post_datetime($post, 'gmt') ? get_post_datetime($post, 'gmt')->format('c') : gmdate('c', strtotime($post->post_date_gmt))),
         'author_id' => $post->post_author,
     );
 
