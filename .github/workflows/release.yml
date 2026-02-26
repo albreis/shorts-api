@@ -14,10 +14,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        with:
+          path: shorts-api
       - name: Create Plugin Zip
         run: |
-          zip -r shorts-api.zip shorts-api.php readme.txt LICENSE index.php README.md assets
+          zip -r shorts-api.zip shorts-api
           
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
