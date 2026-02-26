@@ -18,7 +18,7 @@ jobs:
           path: shorts-api
       - name: Create Plugin Zip
         run: |
-          zip -r shorts-api.zip shorts-api
+          zip -r shorts-api.zip shorts-api -x "*/.*" -x "*/docs/*"
           
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
