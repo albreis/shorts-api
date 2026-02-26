@@ -816,7 +816,7 @@ if (defined('WP_CLI') && WP_CLI) {
                 'paged' => $page,
                 'fields' => 'ids',
                 'orderby' => 'ID',
-                'order' => 'ASC',
+                'order' => 'DESC',
             ));
 
             if (empty($post_ids)) break;
