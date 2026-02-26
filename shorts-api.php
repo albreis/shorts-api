@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: Shorts API Optimized
- * Description: Registers a high-performance REST endpoint for video shorts. Synchronizes posts to a custom table and an external Express API.
- * Version: 2.1.0
+ * Plugin Name: Shorts API
+ * Description: Create a shorts page for videos.
+ * Version: 2.2.8
  * Author: ER Soluções Web
- * Author URI: https://albreis.com.br
+ * Author URI: https://albreis.github.io/shorts-api/
  * Text Domain: shorts-api
  * License: GPLv2 or later
  */
@@ -823,6 +823,7 @@ if (defined('WP_CLI') && WP_CLI) {
 
             foreach ($post_ids as $id) {
                 shorts_api_sync_post($id);
+                WP_CLI::log("{$synced} de {$total} posts sincronizados...");
                 $progress->tick();
                 $synced++;
             }
