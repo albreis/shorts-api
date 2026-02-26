@@ -16,10 +16,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: shorts-api
+          fetch-depth: 0
       - name: Create Plugin Zip
         run: |
           zip -r shorts-api.zip shorts-api -x "*/.*" -x "*/docs/*"
           
+      - name: Update 'latest' tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          git tag -f latest
+          git push origin latest --force
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
