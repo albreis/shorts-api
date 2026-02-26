@@ -18,11 +18,11 @@ jobs:
           path: shorts-api
       - name: Create Plugin Zip
         run: |
-          zip -r shorts-api.zip shorts-api -x "*/.*" -x "*/docs/*"
+          zip -r shorts-api-${{ github.ref_name }}.zip shorts-api -x "*/.*" -x "*/docs/*"
           
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
-          files: shorts-api.zip
+          files: shorts-api-${{ github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
