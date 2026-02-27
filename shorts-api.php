@@ -109,15 +109,7 @@ function shorts_api_register_site_with_backend()
     }
 
     $payload = array(
-        'domain' => $domain,
-        'apiKey' => $api_key, // Send to register for first time or update
-        'domainId' => str_replace('.', '-', $domain),
-        'site_title' => shorts_api_get_site_title(),
-        'sidebar_title' => shorts_api_get_sidebar_title(),
-        'logo_url' => shorts_api_get_logo_url(),
-        'favicon_url' => shorts_api_get_favicon_url(),
-        'ga_id' => get_option('shorts_api_ga_id', defined('SHORTS_API_GAID') ? SHORTS_API_GAID : ''),
-        'sidebar_bg_color' => get_option('shorts_api_sidebar_bg_color', ''),
+        'domain' => $domain
     );
 
     $response = wp_remote_post(SHORTS_EXPRESS_API . '/register-site', array(
@@ -136,11 +128,19 @@ function shorts_api_register_site_with_backend()
     $code = wp_remote_retrieve_response_code($response);
     if ($code >= 200 && $code < 300) {
         $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (isset($body['site']['apiKey'])) {
+            update_option('shorts_api_key', $body['site']['apiKey']);
+        }
         if (isset($body['site']['verificationToken'])) {
             update_option('shorts_api_verification_token', $body['site']['verificationToken']);
             update_option('shorts_api_is_verified', $body['site']['isVerified'] ? '1' : '0');
+            update_option('shorts_api_dns_target', ($body['site']['dnsRecordTarget'] ?? ''));
         }
         update_option('shorts_api_registered', time());
+        
+        // After successful registration, sync configurations
+        shorts_api_sync_configs();
+        
         return true;
     }
 
@@ -704,8 +704,8 @@ add_action('admin_init', function () {
 function shorts_api_settings_page_html()
 {
     $token = get_option('shorts_api_verification_token', '');
+    $dns_target = get_option('shorts_api_dns_target', '');
     $is_verified = get_option('shorts_api_is_verified', '0') === '1';
-    $domain = shorts_api_get_current_domain();
     ?>
     <div class="wrap">
         <h1>Configurações do Shorts API</h1>
@@ -756,9 +756,9 @@ function shorts_api_settings_page_html()
                             <td><code style="word-break: break-all;"><?php echo esc_html($token); ?></code></td>
                         </tr>
                         <tr>
-                            <td><code>A</code></td>
+                            <td><code>A/CNAME</code></td>
                             <td style="color: #646970;"><code>shorts</code></td>
-                            <td><code>82.25.66.100</code></td>
+                            <td><code><?php echo esc_html($dns_target); ?></code></td>
                         </tr>
                     </tbody>
                 </table>
