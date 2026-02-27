@@ -74,36 +74,6 @@
                     <label>Domínio (ex: meusite.com)</label>
                     <input v-model="form.domain" placeholder="meusite.com" required>
                 </div>
-                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>Título do Site</label>
-                        <input v-model="form.site_title" placeholder="Meu Portal de Shorts">
-                    </div>
-                    <div class="form-group">
-                        <label>Texto da Sidebar</label>
-                        <input v-model="form.sidebar_title" placeholder="Explorar">
-                    </div>
-                </div>
-                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>URL da Logo</label>
-                        <input v-model="form.logo_url" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>URL do Favicon</label>
-                        <input v-model="form.favicon_url" placeholder="https://...">
-                    </div>
-                </div>
-                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>Google Analytics ID</label>
-                        <input v-model="form.ga_id" placeholder="G-XXXXXXXXXX">
-                    </div>
-                    <div class="form-group">
-                        <label>Cor de Fundo da Sidebar</label>
-                        <input type="color" v-model="form.sidebar_bg_color" style="height: 45px; padding: 2px;">
-                    </div>
-                </div>
                 <button type="submit" class="btn btn-primary" :disabled="loading" style="margin-top: 1rem;">
                     <i v-if="loading" data-lucide="refresh-cw" class="animate-spin"></i>
                     {{ loading ? 'Registrando...' : 'Registrar Site' }}
@@ -172,12 +142,6 @@
                 
                 const form = reactive({
                     domain: '',
-                    site_title: '',
-                    sidebar_title: '',
-                    logo_url: '',
-                    favicon_url: '',
-                    ga_id: '',
-                    sidebar_bg_color: '#18181b',
                     domainId: ''
                 });
 

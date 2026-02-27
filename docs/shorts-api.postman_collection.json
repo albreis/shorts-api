@@ -133,6 +133,65 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "1. Solicitar Deleção do Site (Gera Token)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/delete-site",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delete-site"
+							]
+						},
+						"description": "PASSO 1: Solicita a deleção. O retorno conterá um 'confirmationToken' que deve ser usado no próximo passo."
+					},
+					"response": []
+				},
+				{
+					"name": "2. Confirmar Deleção do Site (Permanente)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"confirmationToken\": \"TOKEN_RECEBIDO_NO_PASSO_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/delete-site",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"delete-site"
+							]
+						},
+						"description": "PASSO 2: Confirma a deleção permanente do site e todos os vídeos usando o token recebido."
+					},
+					"response": []
 				}
 			]
 		},
@@ -173,7 +232,7 @@
 					"response": []
 				},
 				{
-					"name": "Deletar Short",
+					"name": "Deletar Short Específico",
 					"request": {
 						"method": "DELETE",
 						"header": [
