@@ -1,29 +1,37 @@
 {
 	"info": {
-		"_postman_id": "7f8b9c2a-1e4d-4b5a-9f8c-3d2e1f0a9b8c",
+		"_postman_id": "10d4d5c9-c811-4d7d-93e7-53e6081ec066",
 		"name": "Shorts API v2",
 		"description": "Coleção de requests para a Shorts API - Sincronização de vídeos curtos para portais.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49263844",
+		"_collection_link": "https://albreis-37f7eb2b-6210567.postman.co/workspace/Albreis---Design-%26-Programa%C3%A7%C3%A3o'~1a12d318-fd91-492a-8972-ee3412cb12b5/collection/49263844-10d4d5c9-c811-4d7d-93e7-53e6081ec066?action=share&source=collection_link&creator=49263844"
 	},
 	"item": [
 		{
 			"name": "Configuração do Site",
 			"item": [
 				{
-					"name": "Registrar Novo Site (Gera API Key)",
+					"name": "Registrar Site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"apiKey\", pm.response.json().site.apiKey);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "X-API-Key",
-								"value": "initial_registration",
-								"description": "Use 'initial_registration' ou deixe em branco para novo registro",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"domain\": \"meusite.com\"\n}",
+							"raw": "{\n  \"domain\": \"kinghost.com.br\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -40,7 +48,7 @@
 								"register-site"
 							]
 						},
-						"description": "Ao registrar um novo domínio, a API gerará uma apiKey única e retornará no JSON de resposta. Salve esta chave! As configurações (título, logo, etc) devem ser enviadas depois via 'Sincronizar Estilos'."
+						"description": "## Registrar Site\n\nRegistra um novo site (tenant) na plataforma e salva as configurações iniciais de identidade/branding e integração (ex.: GA). Em caso de sucesso, retorna o objeto `site` criado/atualizado.\n\n### Endpoint\n\n`POST {{baseUrl}}/api/register-site`\n\n### Autenticação\n\nEste endpoint exige a chave enviada no header, ela será registrada como sua chave, guarde com segurança:\n\n- `X-API-Key: {{apiKey}}`\n    \n\n> **Observação:** mantenha `{{apiKey}}` em um _Environment_ (ou Collection Variable) e não versiona/compartilhe valores reais em exemplos públicos. \n  \n\n### Variáveis necessárias\n\n- `baseUrl` — URL base da API (ex.: `https://api.seudominio.com`)\n    \n- `apiKey` — valor usado no header `X-API-Key`\n    \n\n### Body (JSON)\n\nEnvie `Content-Type: application/json` (Postman define automaticamente ao usar **raw → JSON**).\n\nCampos suportados:\n\n| Campo | Tipo | Obrigatório | Descrição | Exemplo |\n| --- | --- | --- | --- | --- |\n| `domain` | string | sim | Domínio do site a ser registrado. | `\"meusite.com\"` |\n| `site_title` | string | não | Título do site. | `\"Meu Portal\"` |\n| `sidebar_title` | string | não | Título exibido na sidebar. | `\"Explorar\"` |\n| `logo_url` | string (URL) | não | URL do logo. | `\"https://...\"` |\n| `favicon_url` | string (URL) | não | URL do favicon. | `\"https://...\"` |\n| `ga_id` | string | não | Google Analytics ID (ex.: GA4). | `\"G-XXXXXXXXXX\"` |\n| `sidebar_bg_color` | string | não | Cor de fundo da sidebar (hex). | `\"#18181b\"` |\n\n#### Exemplo de request body\n\n``` json\n{\n  \"domain\": \"meusite.com\",\n  \"site_title\": \"Meu Portal\",\n  \"sidebar_title\": \"Explorar\",\n  \"logo_url\": \"https://...\",\n  \"favicon_url\": \"https://...\",\n  \"ga_id\": \"G-XXXXXXXXXX\",\n  \"sidebar_bg_color\": \"#18181b\"\n}\n\n ```\n\n### Resposta `200 OK`\n\nRetorna um JSON com:\n\n- `message` — texto de confirmação.\n    \n- `site` — objeto do site registrado.\n    \n\nFormato (shape) esperado:\n\n``` json\n{\n  \"message\": \"Site registered\",\n  \"site\": {\n    \"settings\": {\n      \"site_title\": \"Meu Portal\",\n      \"sidebar_title\": \"Explorar\",\n      \"logo_url\": \"https://...\",\n      \"favicon_url\": \"https://...\",\n      \"ga_id\": \"G-XXXXXXXXXX\",\n      \"sidebar_bg_color\": \"#18181b\"\n    },\n    \"domain\": \"meusite.com\",\n    \"domainId\": \"meusite-com\",\n    \"active\": true,\n    \"isVerified\": false,\n    \"verificationToken\": \"<token>\",\n    \"categories\": [],\n    \"apiKey\": \"sua_chave_secreta\"\n  }\n}\n\n ```\n\n#### Sobre `verificationToken`\n\nO campo `site.verificationToken` é usado para verificação de domínio (ex.: via DNS). Guarde-o para a etapa de verificação do site."
 					},
 					"response": []
 				},
@@ -114,7 +122,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"site_title\": \"Novo Título\",\n  \"logo_url\": \"https://...\",\n  \"sidebar_title\": \"Explorar\",\n  \"favicon_url\": \"https://...\",\n  \"ga_id\": \"G-XXXXXXXXXX\",\n  \"sidebar_bg_color\": \"#18181b\"\n}",
+							"raw": "{\n  \"site_title\": \"Novo Título\",\n  \"logo_url\": \"https://...\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -135,12 +143,25 @@
 					"response": []
 				},
 				{
-					"name": "1. Solicitar Deleção do Site (Gera Token)",
+					"name": "Solicitar Deleção do Site (Gera Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"confirmationToken\", pm.response.json().confirmationToken);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [
 							{
-								"key": "X-API-Key",
+								"key": "x-api-key",
 								"value": "{{apiKey}}",
 								"type": "text"
 							}
@@ -154,42 +175,7 @@
 								"api",
 								"delete-site"
 							]
-						},
-						"description": "PASSO 1: Solicita a deleção. O retorno conterá um 'confirmationToken' que deve ser usado no próximo passo."
-					},
-					"response": []
-				},
-				{
-					"name": "2. Confirmar Deleção do Site (Permanente)",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "X-API-Key",
-								"value": "{{apiKey}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"confirmationToken\": \"TOKEN_RECEBIDO_NO_PASSO_1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/api/delete-site",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"api",
-								"delete-site"
-							]
-						},
-						"description": "PASSO 2: Confirma a deleção permanente do site e todos os vídeos usando o token recebido."
+						}
 					},
 					"response": []
 				}
@@ -200,6 +186,19 @@
 			"item": [
 				{
 					"name": "Sincronizar/Criar Short",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set('shortId', pm.response.json().short.shortId);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -211,7 +210,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"shortId\": \"123\",\n  \"title\": \"Vídeo Incrível\",\n  \"video_urls\": [\n    \"https://cdn.com/video.mp4\"\n  ],\n  \"categories\": [\n    {\n      \"id\": 1,\n      \"name\": \"Entretenimento\"\n    }\n  ],\n  \"tags\": [\n    \"viral\",\n    \"top\"\n  ],\n  \"featured_image\": \"https://...\"\n}",
+							"raw": "{\n  \"shortId\": \"123\",\n  \"title\": \"Vídeo Incrível\",\n  \"video_urls\": [\n    \"https://cdn.com/video.mp4\"\n  ],\n  \"categories\": [\n    {\n      \"id\": 1,\n      \"name\": \"Entretenimento\"\n    }\n  ],\n  \"tags\": [\n    {\n      \"id\": 1,\n      \"name\": \"Entretenimento\"\n    }\n  ],\n  \"featured_image\": \"https://...\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -232,7 +231,7 @@
 					"response": []
 				},
 				{
-					"name": "Deletar Short Específico",
+					"name": "Deletar Short",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -289,6 +288,18 @@
 			"key": "apiKey",
 			"value": "sua_chave_aqui",
 			"type": "string"
+		},
+		{
+			"key": "deletionToken",
+			"value": ""
+		},
+		{
+			"key": "confirmationToken",
+			"value": ""
+		},
+		{
+			"key": "shortId",
+			"value": ""
 		}
 	]
 }
