@@ -773,6 +773,14 @@ function shorts_api_settings_page_html()
                     </form>
                 <?php else: ?>
                     <p style="margin-top: 20px; color: #46b450; font-weight: bold;">✅ Site publicado e verificado com sucesso.</p>
+                    
+                    <div style="background: #f0f7f1; border-left: 4px solid #46b450; padding: 15px; margin: 20px 0;">
+                        <strong>Sitemap de Vídeos:</strong><br>
+                        Seu sitemap já está disponível e otimizado para o Google em:<br>
+                        <code>https://shorts.<?php echo esc_html(shorts_api_get_current_domain()); ?>/api/sitemap.xml</code>
+                        <p class="description">Submeta esta URL no Google Search Console para acelerar a indexação dos seus vídeos.</p>
+                    </div>
+
                     <form method="post">
                         <?php wp_nonce_field('shorts_api_sync_domain_action'); ?>
                         <input type="hidden" name="shorts_api_sync_domain" value="1">
