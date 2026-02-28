@@ -30,7 +30,7 @@ console.log(`Updated stable tag in readme.txt to ${newVersion}`);
 // 3. Update update.json
 const updateData = {
   version: newVersion,
-  download_url: `https://github.com/albreis/shorts-api/archive/refs/tags/v${newVersion}.zip`
+  download_url: `https://github.com/albreis/shorts-api/releases/download/v${newVersion}/shorts-api-v${newVersion}.zip`
 };
 fs.writeFileSync(updateFile, JSON.stringify(updateData, null, 2));
 console.log(`Updated update.json to version ${newVersion}`);
@@ -41,14 +41,19 @@ packageContent.version = newVersion;
 fs.writeFileSync(packageFile, JSON.stringify(packageContent, null, 2));
 console.log(`Updated package.json to version ${newVersion}`);
 
-// 5. Git commands
+// 5. Create ZIP for release info
+const zipName = `shorts-api-v${newVersion}.zip`;
+console.log(`\nNext step: Create '${zipName}' and upload it to the GitHub Release.`);
+
+// 6. Git commands
 try {
   execSync(`git add .`, { stdio: 'inherit' });
   execSync(`git commit -m "chore: release v${newVersion}"`, { stdio: 'inherit' });
   execSync(`git tag v${newVersion}`, { stdio: 'inherit' });
   execSync(`git push`, { stdio: 'inherit' });
   execSync(`git push --tags`, { stdio: 'inherit' });
-  console.log('Successfully deployed and tagged version ' + newVersion);
+  console.log('\nSuccessfully deployed version ' + newVersion);
+  console.log(`\nIMPORTANT: Create a Release in GitHub for tag v${newVersion} and upload '${zipName}'`);
 } catch (error) {
   console.error('Error during git commands:', error.message);
   process.exit(1);
