@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Shorts API
  * Description: Create a shorts page for videos.
- * Version: 2.2.21
+ * Version: 2.2.22
  * Author: ER Soluções Web
  * Author URI: https://albreis.github.io/shorts-api/
  * Text Domain: shorts-api
