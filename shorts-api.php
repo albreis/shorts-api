@@ -12,6 +12,8 @@
 if (!defined('ABSPATH'))
     exit;
 
+define('SHORTS_EXPRESS_API', 'https://shorts.albreis.com.br/api');
+
 /**
  * Plugin Activation: Register site with backend
  */
@@ -21,8 +23,6 @@ function shorts_api_plugin_activate()
 {
     shorts_api_register_site_with_backend();
 }
-
-define('SHORTS_EXPRESS_API', 'https://shorts.albreis.com.br/api');
 
 /**
  * Helper to get normalized domain (strips www. and http/s)
@@ -896,7 +896,7 @@ function shorts_api_check_for_update($transient)
     $current_version = $transient->checked[$plugin_slug] ?? '0.0.0';
 
     // Fetch update.json from GitHub (raw content)
-    $url = 'https://raw.githubusercontent.com/albreis/shorts-api/main/update.json';
+    $url = 'https://raw.githubusercontent.com/albreis/shorts-api/master/update.json';
     $response = wp_remote_get($url, array('timeout' => 10));
 
     if (is_wp_error($response)) {
@@ -930,7 +930,7 @@ function shorts_api_plugin_info($res, $action, $args)
     if ($action !== 'plugin_information') return $res;
     if ($args->slug !== 'shorts-api') return $res;
 
-    $url = 'https://raw.githubusercontent.com/albreis/shorts-api/main/update.json';
+    $url = 'https://raw.githubusercontent.com/albreis/shorts-api/master/update.json';
     $response = wp_remote_get($url);
     if (is_wp_error($response)) return $res;
 
