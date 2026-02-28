@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Shorts API
  * Description: Create a shorts page for videos.
- * Version: 2.2.15
+ * Version: 2.2.21
  * Author: ER Soluções Web
  * Author URI: https://albreis.github.io/shorts-api/
  * Text Domain: shorts-api
@@ -458,6 +458,18 @@ add_action('admin_enqueue_scripts', function ($hook) {
                     }).open();
                 });
             });
+
+            function copyAndOpenGSC() {
+                const email = 'firebase-adminsdk-fbsvc@shorts-api-2026.iam.gserviceaccount.com';
+                navigator.clipboard.writeText(email).then(() => {
+                    alert('E-mail da conta de serviço copiado para o clipboard!\n\nAgora adicione este e-mail como PROPRIETÁRIO (Owner) no Google Search Console que será aberto na lista de usuários.');
+                    const domain = '<?php echo esc_js(shorts_api_get_current_domain()); ?>';
+                    const gscUrl = 'https://search.google.com/search-console/users?resource_id=https://shorts.' + domain + '/';
+                    window.open(gscUrl, '_blank');
+                }).catch(err => {
+                    alert('Erro ao copiar e-mail: ' + err);
+                });
+            }
         </script>
         <style>
             #shorts-cat-list {
@@ -779,6 +791,12 @@ function shorts_api_settings_page_html()
                         Seu sitemap já está disponível e otimizado para o Google em:<br>
                         <code>https://shorts.<?php echo esc_html(shorts_api_get_current_domain()); ?>/api/sitemap.xml</code>
                         <p class="description">Submeta esta URL no Google Search Console para acelerar a indexação dos seus vídeos.</p>
+                        
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #c3e6cb;">
+                            <strong>Indexação Automática (Google API):</strong><br>
+                            <p class="description">Para que novos vídeos sejam indexados instantaneamente sem fila, adicione nossa conta de serviço como <b>Proprietário</b> no Search Console.</p>
+                            <button type="button" class="button button-primary" onclick="copyAndOpenGSC()">Configurar Indexação Automática</button>
+                        </div>
                     </div>
 
                     <form method="post">
