@@ -880,3 +880,73 @@ if (defined('WP_CLI') && WP_CLI) {
         }
     });
 }
+
+/**
+ * Custom Update System
+ */
+add_filter('pre_set_site_transient_update_plugins', 'shorts_api_check_for_update');
+
+function shorts_api_check_for_update($transient)
+{
+    if (empty($transient->checked)) {
+        return $transient;
+    }
+
+    $plugin_slug = plugin_basename(__FILE__);
+    $current_version = $transient->checked[$plugin_slug] ?? '0.0.0';
+
+    // Fetch update.json from GitHub (raw content)
+    $url = 'https://raw.githubusercontent.com/albreis/shorts-api/main/update.json';
+    $response = wp_remote_get($url, array('timeout' => 10));
+
+    if (is_wp_error($response)) {
+        return $transient;
+    }
+
+    $data = json_decode(wp_remote_retrieve_body($response));
+    if (!$data || !isset($data->version)) {
+        return $transient;
+    }
+
+    if (version_compare($current_version, $data->version, '<')) {
+        $obj = new stdClass();
+        $obj->slug = 'shorts-api';
+        $obj->plugin = $plugin_slug;
+        $obj->new_version = $data->version;
+        $obj->url = 'https://github.com/albreis/shorts-api';
+        $obj->package = $data->download_url;
+        $obj->tested = '6.4'; // Update as needed
+        
+        $transient->response[$plugin_slug] = $obj;
+    }
+
+    return $transient;
+}
+
+// Show plugin info in the "View details" modal
+add_filter('plugins_api', 'shorts_api_plugin_info', 20, 3);
+function shorts_api_plugin_info($res, $action, $args)
+{
+    if ($action !== 'plugin_information') return $res;
+    if ($args->slug !== 'shorts-api') return $res;
+
+    $url = 'https://raw.githubusercontent.com/albreis/shorts-api/main/update.json';
+    $response = wp_remote_get($url);
+    if (is_wp_error($response)) return $res;
+
+    $data = json_decode(wp_remote_retrieve_body($response));
+    
+    $res = new stdClass();
+    $res->name = 'Shorts API';
+    $res->slug = 'shorts-api';
+    $res->version = $data->version ?? '2.2.21';
+    $res->author = '<a href="https://albreis.github.io/shorts-api/">ER Soluções Web</a>';
+    $res->homepage = 'https://github.com/albreis/shorts-api';
+    $res->download_link = $data->download_url ?? '';
+    $res->sections = array(
+        'description' => 'Create a shorts page for videos.',
+        'changelog' => 'Veja o histórico de releases no GitHub.'
+    );
+
+    return $res;
+}
